@@ -1,5 +1,6 @@
 # hw2-2
  (1) how to setup and run your program 
+ 
  For convenience and as the requirement said, I use three Threads to implement this part.
 Thread1 is for PWM, Thread2 is for ADC, Thread3 is for print.
 Thread1 is exactly as same as problem1.
