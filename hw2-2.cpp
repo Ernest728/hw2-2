@@ -6,11 +6,11 @@ EventQueue queue(32 * EVENTS_EVENT_SIZE);
 Thread thread1, thread2, thread3;
 void print()
 {
-    printf("%f\n", Aout.read());
+    printf("%f\r\n", Aout.read());
 }
 void PWM_thread()
 {
-    PWM1.period_ms(50);
+    PWM1.period_ms(5);
     float R[20];
     int Re[20];
     int i = 0;
@@ -24,11 +24,11 @@ void PWM_thread()
     for (;i < 20; i++)
         R[i] = 0.0;
     for (i = 0; i < 20; i++)
-        Re[i] = int(R[i]*50000);
+        Re[i] = int(R[i]*5000);
     while (true) {
         for (int j = 0; j < 20; j++) {
             PWM1.pulsewidth_us(Re[j]);
-            wait_us(46500);
+            ThisThread::sleep_for(50ms);
         }
     }
 }
@@ -40,14 +40,14 @@ void Light_sense()
 
             Aout = Ain;
             queue.call(print);
-            wait_us(1000);
+            ThisThread::sleep_for(1ms);
     }
 }
 
 int main()
 {
-    thread1.start(PWM_thread);
     thread2.start(Light_sense);
+    thread1.start(PWM_thread);
+    
     thread3.start(callback(&queue, &EventQueue::dispatch_forever));
 }
-
